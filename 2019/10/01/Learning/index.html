@@ -79,13 +79,23 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="Pwn初学习在学习完逆向后，尝试Pwn的第一天。总结一下Pwn的几个基本思路。当函数执行内部指令的过程中我们是无法拿到程序的控制权，对此至于在发生在函数调用或者结束函数调用。程序的控制权会在函数状态之间跳转。这时才可以修改函数状态来实现攻击，所以我们的目的就是让ip载入攻击指令的地址。让ip载入攻击指令的地址有几种：覆盖返回地址，在ret时将攻击地址赋值给ip。其次我们也可以在溢出数据内包含一段攻">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pwn Primary Learning">
+<meta property="og:url" content="http://yoursite.com/2019/10/01/Learning/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Pwn初学习在学习完逆向后，尝试Pwn的第一天。总结一下Pwn的几个基本思路。当函数执行内部指令的过程中我们是无法拿到程序的控制权，对此至于在发生在函数调用或者结束函数调用。程序的控制权会在函数状态之间跳转。这时才可以修改函数状态来实现攻击，所以我们的目的就是让ip载入攻击指令的地址。让ip载入攻击指令的地址有几种：覆盖返回地址，在ret时将攻击地址赋值给ip。其次我们也可以在溢出数据内包含一段攻">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-f9893739d4495a7708434fb93cebdfae_hd.png">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-4523795fdf150416d91e4e4adc0ef0ae_hd.png">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-a4964a02ab5a974439a157cf9d5b017c_hd.png">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-b78288c5eb8bfd2568728f34fbbb0e9e_hd.png">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-caa5320d0bb0101edad4b9127f6fe413_hd.png">
+<meta property="og:updated_time" content="2019-10-02T06:13:40.083Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="Pwn Primary Learning">
+<meta name="twitter:description" content="Pwn初学习在学习完逆向后，尝试Pwn的第一天。总结一下Pwn的几个基本思路。当函数执行内部指令的过程中我们是无法拿到程序的控制权，对此至于在发生在函数调用或者结束函数调用。程序的控制权会在函数状态之间跳转。这时才可以修改函数状态来实现攻击，所以我们的目的就是让ip载入攻击指令的地址。让ip载入攻击指令的地址有几种：覆盖返回地址，在ret时将攻击地址赋值给ip。其次我们也可以在溢出数据内包含一段攻">
+<meta name="twitter:image" content="https://pic3.zhimg.com/80/v2-f9893739d4495a7708434fb93cebdfae_hd.png">
 
 
 
@@ -115,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/2019/10/01/Learning/">
 
 
 
 
 
-  <title>Hexo</title>
+  <title>Pwn Primary Learning | Hexo</title>
   
 
 
@@ -140,8 +150,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -214,9 +223,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -246,9 +255,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/01/Learning/" itemprop="url">Pwn Primary Learning</a></h1>
+          <h1 class="post-title" itemprop="name headline">Pwn Primary Learning</h1>
         
 
         <div class="post-meta">
@@ -298,9 +305,7 @@
       
 
       
-        
-          
-            <h2 id="Pwn初学习"><a href="#Pwn初学习" class="headerlink" title="Pwn初学习"></a>Pwn初学习</h2><p>在学习完逆向后，尝试Pwn的第一天。总结一下Pwn的几个基本思路。<br>当函数执行内部指令的过程中我们是无法拿到程序的控制权，对此至于在发生在函数调用或者结束函数调用。程序的控制权会在函数状态之间跳转。这时才可以修改函数状态来实现攻击，所以我们的目的就是让ip载入攻击指令的地址。<br>让ip载入攻击指令的地址有几种：覆盖返回地址，在ret时将攻击地址赋值给ip。其次我们也可以在溢出数据内包含一段攻击指令，或者在内存其他位置寻找可用的攻击指令。  </p>
+        <h2 id="Pwn初学习"><a href="#Pwn初学习" class="headerlink" title="Pwn初学习"></a>Pwn初学习</h2><p>在学习完逆向后，尝试Pwn的第一天。总结一下Pwn的几个基本思路。<br>当函数执行内部指令的过程中我们是无法拿到程序的控制权，对此至于在发生在函数调用或者结束函数调用。程序的控制权会在函数状态之间跳转。这时才可以修改函数状态来实现攻击，所以我们的目的就是让ip载入攻击指令的地址。<br>让ip载入攻击指令的地址有几种：覆盖返回地址，在ret时将攻击地址赋值给ip。其次我们也可以在溢出数据内包含一段攻击指令，或者在内存其他位置寻找可用的攻击指令。  </p>
 <p>暂时学习的技术有：<br>修改返回地址，让其指向溢出数据的一段指令(shellcode)<br>修改返回地址，让其指向内存中已有的某个函数(return2libc)<br>修改返回地址，让其指向内存中已有的一段指令(ROP)<br>修改某个被调用函数的地址，让其指向另一个函数(hijack GOT)</p>
 <h4 id="shellcode"><a href="#shellcode" class="headerlink" title="shellcode"></a>shellcode</h4><p>我们需要在溢出数据中包含一段攻击指令，用攻击指令的起始位置覆盖掉返回地址。从而达到打开shell获得当前进程的控制权的目的。这类指令片段也被称为”shellcode“。shellcode可以用汇编语言再转成对应的机器码，也可以上网搜索直接复制粘贴。<br><img src="https://pic3.zhimg.com/80/v2-f9893739d4495a7708434fb93cebdfae_hd.png"><br>payload:padding1+address of shellcode+padding2+shellcode<br>padding1处的数据可以随意填充(但不可以包含”x00”。否则向程序传入溢出数据时可能会造成截断)，长度应该正好覆盖函数的基地址。address of shellcode是后面shellcode的起始地址，用来覆盖返回地址。padding2处的数据也可以随意填充，长度可以任意。shellcode应该为十六进制机器码格式<br>对于以上构造，我们要解决两个问题。<br>1.返回地址之前的填充数据(padding1)应该多长<br>我们可以用调试工具查看汇编代码来确定这个距离，也可以在运行程序时用不断增加输入的长度的方法来试探(如果返回地址被无效地址例如”AAAA”覆盖,程序会终止并报错).<br>2.shellcode起始地址应该时多少<br>我们可以在调试工具里查看返回地址的位置(可以查看ebp的内容然后再加4(32位))，可是在调试工具里的这个地址和正常运行时并不一致，这是运行环境变量等因素有所不同造成的，所以这种情况我们只能得到大致但不确切的shellcode起始地址，解决办法是在padding2里填充若干的长度的”\x90”。这个机器码对应的指令时NOP，也就是告诉CPU什么都不做，然后跳到吓一跳指令。有了这一段NOP的填充，只要返回地址能命中这一段中的任意位置，都可以无副作用的跳到shellcode的起始位置。  </p>
 <p>操作系统可以将函数调用栈的起始地址设为随机化(ASLR Address Space Layout Randomization)这样程序每次运行时的函数返回地址都会随机变化。反正如果系统关闭了上述的随机化，那么程序每次运行时函数的返回地址会是相同的，这样我们可以通过输入无效的溢出数据来生成core文件，再通过调试工具在core文件中找到返回地址的位置，从而确定shellcode的起始位置(始终为了确定shellcode的起始位置)  </p>
@@ -377,8 +382,6 @@ padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函�
 <p><strong>防御措施</strong>  </p>
 <p>介绍过几种溢出的基础方法，我们再来补充一下操作系统内有哪些常见的措施可以进行防御，首先，通常情况下默认编译设置下都会取消栈上数据的可执行权限，这样简单的shellcode溢出攻击就无法实现了。其次可以在操作系统内开启内存布局随机化(ASLR)，这样可以增大确定堆栈内数据和动态库内函数内存地址的难度。编译程序时还可以设置某些编译选项，使程序在运行时会在函数栈上的ebp地址和返回地址之间生成一个特殊的值，这个值被称为“金丝雀值”。这样一旦发生了栈溢出并覆盖了返回地址，这个值就会被改写，从而实现函数的越界检查。最后值得强调的是，尽可能写出安全可靠的代码，不给栈溢出提供写入越界的可能。</p>
 
-          
-        
       
     </div>
     
@@ -395,144 +398,28 @@ padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函�
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/01/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/01/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-01T16:19:50+08:00">
-                2019-10-01
-              </time>
+              <a href="/2019/10/01/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -542,10 +429,11 @@ padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函�
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -553,6 +441,10 @@ padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函�
 
 
           
+
+  
+
+
 
         </div>
         
@@ -573,8 +465,17 @@ padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函�
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -616,6 +517,22 @@ padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函�
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Pwn初学习"><span class="nav-number">1.</span> <span class="nav-text">Pwn初学习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#shellcode"><span class="nav-number">1.0.1.</span> <span class="nav-text">shellcode</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Return2libc"><span class="nav-number">1.0.2.</span> <span class="nav-text">Return2libc</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ROP"><span class="nav-number">1.0.3.</span> <span class="nav-text">ROP</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Hijack-GOT"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">Hijack GOT</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -756,6 +673,10 @@ padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函�
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
