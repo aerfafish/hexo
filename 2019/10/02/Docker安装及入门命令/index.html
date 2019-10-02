@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Docker的安装由于Pwn中 开始安装 由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本：   1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引 1$ sudo apt-get update  安装最新版本的Docker CE： 1$ sudo apt-get instal">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker安装及入门命令">
+<meta property="og:url" content="http://yoursite.com/2019/10/02/Docker安装及入门命令/index.html">
+<meta property="og:site_name" content="Aerfafish">
+<meta property="og:description" content="Docker的安装由于Pwn中 开始安装 由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本：   1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引 1$ sudo apt-get update  安装最新版本的Docker CE： 1$ sudo apt-get instal">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-10-02T13:09:12.254Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker安装及入门命令">
+<meta name="twitter:description" content="Docker的安装由于Pwn中 开始安装 由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本：   1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引 1$ sudo apt-get update  安装最新版本的Docker CE： 1$ sudo apt-get instal">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/02/Docker安装及入门命令/">
+
+
+
+
+
+  <title>Docker安装及入门命令 | Aerfafish</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Aerfafish</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/02/Docker安装及入门命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Aerfafish">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aerfafish">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Docker安装及入门命令</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-02T16:18:40+08:00">
+                2019-10-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="Docker的安装"><a href="#Docker的安装" class="headerlink" title="Docker的安装"></a>Docker的安装</h4><p>由于Pwn中</p>
+<h5 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h5><ul>
+<li><p>由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get remove docker docker-engine docker-ce docker.io</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更新apt包索引</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get update</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装最新版本的Docker CE：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install -y docker-ce</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<a id="more"></a>
+<h5 id="验证docker"><a href="#验证docker" class="headerlink" title="验证docker"></a>验证docker</h5><ul>
+<li><p>查看docker服务是否启动：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ systemctl status docker</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>若未启动，则启动docker服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl start docker</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>经典的hello world：(稍等 会加载一会)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run hello-world</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>若显示Hello from Docker则安装成功  </p>
+<hr>
+<h4 id="Docker基础命令"><a href="#Docker基础命令" class="headerlink" title="Docker基础命令"></a>Docker基础命令</h4><h5 id="Docker-Hello-World"><a href="#Docker-Hello-World" class="headerlink" title="Docker Hello World"></a>Docker Hello World</h5><ul>
+<li><p>Docker 允许你在容器内运行应用程序， 使用 docker run 命令来在容器内运行一个应用程序。</p>
+</li>
+<li><p>输出Hello world</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker run ubuntu:18.04 /bin/echo &quot;Hello world&quot;</span><br><span class="line">Hello world</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>参数解析：  </p>
+<ul>
+<li>docker: Docker 的二进制执行文件。</li>
+<li>run:与前面的 docker 组合来运行一个容器。</li>
+<li>ubuntu:18.04指定要运行的镜像，Docker首先从本地主机上查找镜像是否存在，如果不存在，Docker 就会从镜像仓库 Docker Hub 下载公共镜像。</li>
+<li>/bin/echo “Hello world”: 在启动的容器里执行的命令  </li>
+</ul>
+</li>
+</ul>
+<hr>
+<h5 id="运行交互式的容器"><a href="#运行交互式的容器" class="headerlink" title="运行交互式的容器"></a>运行交互式的容器</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -i -t ubuntu:18.04 /bin/bash</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数解析：  <ul>
+<li>-t:在新容器内指定一个伪终端或终端。</li>
+<li>-i:允许你对容器内的标准输入 (STDIN) 进行交互。  </li>
+</ul>
+</li>
+</ul>
+<p>我们可以通过运行exit命令或者使用CTRL+D来退出容器。</p>
+<hr>
+<h5 id="启动容器（后台模式）"><a href="#启动容器（后台模式）" class="headerlink" title="启动容器（后台模式）"></a>启动容器（后台模式）</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -d ubuntu:18.04 /bin/sh -c &quot;while true; do echo hello world; sleep 1; done&quot;</span><br><span class="line">2b1b7a428627c51ab8810d541d759f072b4fc75487eed05812646b8534a2fe63</span><br></pre></td></tr></table></figure>
+
+<p>在输出中，我们没有看到期望的”hello world”，而是一串长字符<br><strong><em>2b1b7a428627c51ab8810d541d759f072b4fc75487eed05812646b8534a2fe63</em></strong><br>这个长字符串叫做容器ID，对每个容器来说都是唯一的，我们可以通过容器ID来查看对应的容器发生了什么。<br>首先，我们需要确认容器有在运行，可以通过 <strong><em>docker ps</em></strong> 来查看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker ps</span><br></pre></td></tr></table></figure>
+
+<p>也可以看所有的容器包括运行和未运行的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker ps -a</span><br></pre></td></tr></table></figure>
+
+<p><strong><em>CONTAINER ID</em></strong>:容器ID<br><strong><em>NAMES</em></strong>:自动分配的容器名称<br>在容器内使用docker logs命令，查看容器内的标准输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker logs 2b1b7a428627     # 2b1b7a428627是你的容器ID</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker logs amazing_cori     # amazing_cori是你的容器名字</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker stop 2b1b7a428627     # 2b1b7a428627是你的容器ID</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker stop amazing_cori     # amazing_cori是你的容器名字</span><br></pre></td></tr></table></figure>
+
+<p>通过docker ps查看，容器已经停止工作:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker ps</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="重命名容器"><a href="#重命名容器" class="headerlink" title="重命名容器"></a>重命名容器</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker container rename amazing_cori aerfafish</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="容器端口设置"><a href="#容器端口设置" class="headerlink" title="容器端口设置"></a>容器端口设置</h5><p>为了避免端口冲突，在启动容器时，可以将命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -i -t -p 23946:23946 ubuntu:18.04 /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>中的第一个端口号23946改为其他数字。</p>
+<hr>
+<h4 id="IDA的远程调试配置"><a href="#IDA的远程调试配置" class="headerlink" title="IDA的远程调试配置"></a>IDA的远程调试配置</h4><p>首先我们先创建一个ubuntu:18.04的容器，然后将名字改为自己比较顺手的，方便后续操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -i -t -p 23956:23946 ubuntu:18.04 /bin/bash</span><br><span class="line">$ exit                   #关闭docker容器</span><br><span class="line">$ docker rename amazing_core aerfafish</span><br></pre></td></tr></table></figure>
+
+<p>我们在IDA所在的文件夹的dbgsrv文件夹下找到需要的调试服务器linux_server(32位)和linux_serverx64(64位)并复制到容器中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker cp linux_serverx64 aerfafish:/root/linux_serverx64</span><br></pre></td></tr></table></figure>
+
+<p>将linux_serverx64复制到64位容器中的/root目录下。此时我们登录容器可以看到linux_serverx64，运行该server会提示正在监听23946端口。  </p>
+<p>这时候打开IDA，选择debugger为remote linux debugger  </p>
+<p>打开ifconfig查看docker ip地址在debugger的Process Option中设置IP和端口为23946则可以进行远程调试  </p>
+<p>但这时可能会遇见一个错误<kdb><strong><em>Operation not permitted[1] Closing connection</em></strong></kdb><br>加入 –security-opt seccomp:unconfined选项，关闭docker远程命令执行保护</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --security-opt seccomp:unconfined -it -p 23945:23946 ubuntu:18.04 /bin/bash</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用pwntools和IDA调试程序"><a href="#使用pwntools和IDA调试程序" class="headerlink" title="使用pwntools和IDA调试程序"></a>使用pwntools和IDA调试程序</h4><p>在上一节中我们尝试了使用IDA配置远程调试，但是在调试中我们可能会有一些特殊的需求，比如自动化完成一些操作或者向程序传递一些包含不可见字符的地址，如\x50\x83\x04\x08(0x08048350)。这个时候我们就需要使用脚本pwntools来完成此类操作。<br>安装完成后输入python进入python环境，使用from pwn import * 导入pwntools库。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br></pre></td></tr></table></figure>
+
+<p>使用docker exec在32位的容器中新开一个bash shell，跳转到heapTest_x86所在目录/root，查看容器的IP地址，然后执行命令socat tcp-listen:10001,reuseaddr,fork EXEC:./heapTest_x86,pty,raw,echo=0将heapTest_x86的IO转发到10001端口上。<br>在此之前我们需要在容器中安装socat  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ apt-get update</span><br><span class="line">$ apt-get install socat</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/01/Learning/" rel="next" title="Pwn Primary Learning">
+                <i class="fa fa-chevron-left"></i> Pwn Primary Learning
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Aerfafish">
+            
+              <p class="site-author-name" itemprop="name">Aerfafish</p>
+              <p class="site-description motion-element" itemprop="description">这里一枚蒻苣，让我再学学再来看</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aerfafish" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:13880263644@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/aerfafish" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com/aerfafish" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Docker的安装"><span class="nav-number">1.</span> <span class="nav-text">Docker的安装</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#开始安装"><span class="nav-number">1.1.</span> <span class="nav-text">开始安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#验证docker"><span class="nav-number">1.2.</span> <span class="nav-text">验证docker</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Docker基础命令"><span class="nav-number">2.</span> <span class="nav-text">Docker基础命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Docker-Hello-World"><span class="nav-number">2.1.</span> <span class="nav-text">Docker Hello World</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#运行交互式的容器"><span class="nav-number">2.2.</span> <span class="nav-text">运行交互式的容器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#启动容器（后台模式）"><span class="nav-number">2.3.</span> <span class="nav-text">启动容器（后台模式）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#停止容器"><span class="nav-number">2.4.</span> <span class="nav-text">停止容器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#重命名容器"><span class="nav-number">2.5.</span> <span class="nav-text">重命名容器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#容器端口设置"><span class="nav-number">2.6.</span> <span class="nav-text">容器端口设置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IDA的远程调试配置"><span class="nav-number">3.</span> <span class="nav-text">IDA的远程调试配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用pwntools和IDA调试程序"><span class="nav-number">4.</span> <span class="nav-text">使用pwntools和IDA调试程序</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Aerfafish</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
