@@ -80,12 +80,12 @@
 
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="Aerfafish">
 <meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Aerfafish">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="Aerfafish">
 
 
 
@@ -121,7 +121,7 @@
 
 
 
-  <title>Hexo</title>
+  <title>Aerfafish</title>
   
 
 
@@ -152,7 +152,7 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
+        <span class="site-title">Aerfafish</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -232,13 +232,13 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/01/Learning/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="Aerfafish">
       <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="Aerfafish">
     </span>
 
     
@@ -299,217 +299,15 @@
 
       
         
-          
-            <h2 id="Pwn初学习"><a href="#Pwn初学习" class="headerlink" title="Pwn初学习"></a>Pwn初学习</h2><p>在学习完逆向后，尝试Pwn的第一天。总结一下Pwn的几个基本思路。<br>当函数执行内部指令的过程中我们是无法拿到程序的控制权，对此至于在发生在函数调用或者结束函数调用。程序的控制权会在函数状态之间跳转。这时才可以修改函数状态来实现攻击，所以我们的目的就是让ip载入攻击指令的地址。<br>让ip载入攻击指令的地址有几种：覆盖返回地址，在ret时将攻击地址赋值给ip。其次我们也可以在溢出数据内包含一段攻击指令，或者在内存其他位置寻找可用的攻击指令。  </p>
+          <h2 id="Pwn初学习"><a href="#Pwn初学习" class="headerlink" title="Pwn初学习"></a>Pwn初学习</h2><p>在学习完逆向后，尝试Pwn的第一天。总结一下Pwn的几个基本思路。<br>当函数执行内部指令的过程中我们是无法拿到程序的控制权，对此至于在发生在函数调用或者结束函数调用。程序的控制权会在函数状态之间跳转。这时才可以修改函数状态来实现攻击，所以我们的目的就是让ip载入攻击指令的地址。<br>让ip载入攻击指令的地址有几种：覆盖返回地址，在ret时将攻击地址赋值给ip。其次我们也可以在溢出数据内包含一段攻击指令，或者在内存其他位置寻找可用的攻击指令。  </p>
 <p>暂时学习的技术有：<br>修改返回地址，让其指向溢出数据的一段指令(shellcode)<br>修改返回地址，让其指向内存中已有的某个函数(return2libc)<br>修改返回地址，让其指向内存中已有的一段指令(ROP)<br>修改某个被调用函数的地址，让其指向另一个函数(hijack GOT)</p>
-<h4 id="shellcode"><a href="#shellcode" class="headerlink" title="shellcode"></a>shellcode</h4><p>我们需要在溢出数据中包含一段攻击指令，用攻击指令的起始位置覆盖掉返回地址。从而达到打开shell获得当前进程的控制权的目的。这类指令片段也被称为”shellcode“。shellcode可以用汇编语言再转成对应的机器码，也可以上网搜索直接复制粘贴。<br><img src="https://pic3.zhimg.com/80/v2-f9893739d4495a7708434fb93cebdfae_hd.png"><br>payload:padding1+address of shellcode+padding2+shellcode<br>padding1处的数据可以随意填充(但不可以包含”x00”。否则向程序传入溢出数据时可能会造成截断)，长度应该正好覆盖函数的基地址。address of shellcode是后面shellcode的起始地址，用来覆盖返回地址。padding2处的数据也可以随意填充，长度可以任意。shellcode应该为十六进制机器码格式<br>对于以上构造，我们要解决两个问题。<br>1.返回地址之前的填充数据(padding1)应该多长<br>我们可以用调试工具查看汇编代码来确定这个距离，也可以在运行程序时用不断增加输入的长度的方法来试探(如果返回地址被无效地址例如”AAAA”覆盖,程序会终止并报错).<br>2.shellcode起始地址应该时多少<br>我们可以在调试工具里查看返回地址的位置(可以查看ebp的内容然后再加4(32位))，可是在调试工具里的这个地址和正常运行时并不一致，这是运行环境变量等因素有所不同造成的，所以这种情况我们只能得到大致但不确切的shellcode起始地址，解决办法是在padding2里填充若干的长度的”\x90”。这个机器码对应的指令时NOP，也就是告诉CPU什么都不做，然后跳到吓一跳指令。有了这一段NOP的填充，只要返回地址能命中这一段中的任意位置，都可以无副作用的跳到shellcode的起始位置。  </p>
-<p>操作系统可以将函数调用栈的起始地址设为随机化(ASLR Address Space Layout Randomization)这样程序每次运行时的函数返回地址都会随机变化。反正如果系统关闭了上述的随机化，那么程序每次运行时函数的返回地址会是相同的，这样我们可以通过输入无效的溢出数据来生成core文件，再通过调试工具在core文件中找到返回地址的位置，从而确定shellcode的起始位置(始终为了确定shellcode的起始位置)  </p>
-<p>但执行shellcode还有一个前提就是在函数调用栈上的数据要有可执行的权限(另一个前提是上面提到的关闭内存布局随机化)。很多时候操作系统会关闭函数调用栈的可执行权限。这样shellcode的方法就失效了。不过我们还可以尝试使用内存里已有的指令或者函数。因为这部分本来就是可执行的，所以不会受上述执行权限的限制。这就包括return2lib和ROP两种。  </p>
-<h4 id="Return2libc"><a href="#Return2libc" class="headerlink" title="Return2libc"></a>Return2libc</h4><p>这个技术我们要完成的任务包括:在内存中确定某个函数的地址，并用其覆盖掉返回地址。由于libc动态链接库中的函数被广泛使用。所以很大概率可以在内存中找到该动态库。同时由于该动态库包含了一些系统级的函数(例如system()等)，所以通常使用这些系统级函数来获得当前进程的控制权。鉴于要执行的函数可能需要参数，比如调用system()函数打开shell的完成形式位system(“/bin/sh”)，所以溢出数据也要包括必要的参数。下面就以执行system(“/bin/sh”)为例，先写出溢出数据的组成，再确定对应的各部分填充进去。</p>
-<p>*payload: padding1+address of system()+padding2+address of “/bin/sh”  *</p>
-<img src="https://pic3.zhimg.com/80/v2-4523795fdf150416d91e4e4adc0ef0ae_hd.png">
-padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函数的基地址。adress of system()是system()在内存中的地址，用来覆盖返回地址。padding2处的数据长度位4(32位)，对应调用system()时的返回地址。因为我们这里只需要打开shell就可以，并不关心shell退出之后的行为，所以padding2的内容可以随意填充。adress of "/bin/sh" 时字符串 "/bin/sh" 在内存中的地址，作为传给system()的参数  
-
-<p>根据上面构造，我们解决一个问题。  </p>
-<p>1.返回地址之前的填充数据(padding1)应该多长？  </p>
-<p>解决方法和shellcode中提到的答案一样。  </p>
-<p>2.system()函数地址应该是多少？  </p>
-<p>要回答这个问题就要看看程序是如何调用动态链接库中的函数的。当函数被动态链接至程序中，程序在运行时首先确定动态链接库在内存中的起始地址，再加上函数在动态库中的相对偏移量，最终得到函数在内存中的绝对地址。说到确定动态库的内存地址，就要回顾下shellcode中提到的布局随机化ASLR。这项技术也会将动态库加载的起始地址做随机化处理。所以，如果操作系统打开了ASLR，程序每次运行时动态库的起始位置都在变化，也就无法确定库内函数的绝对地址。在ASLR被关闭的前提下，我们可以通过调试工具在运行程序过程中直接查看system()的地址，也可以查看动态库在内存的起始地址，再在动态库内函数的相对偏移位置，通过计算得到函数的绝对地址。  </p>
-<p>最后, “/bin/sh” 的地址在哪里  </p>
-<p>可以在动态库里搜索这个 字符串，如果存在，就可以按照动态库的起始地址+相对便宜来确定其绝对地址。如果在动态库里找不到，可以将这个字符串加到环境变量里，再通过getnv()等函数来确定地址。</p>
-<h4 id="ROP"><a href="#ROP" class="headerlink" title="ROP"></a>ROP</h4><p>这个技术我们要完成的任务包括：在内存中确定某段指令的地址，并用其覆盖返回地址。可是既然可以覆盖返回地址并定位到内存地址，为什么不直接用上篇提到的return2libc呢？因为有时目标在内存中无法找到，有时目标操作并没有特定的函数可以完美适配。这时我们就需要在内存中寻找多个指令片段，拼凑出一系列的操作来达成目的。假如要执行某段指令(我们将其称为”gadget”，意为小工具)，溢出的数据应该以以下的方式构造(padding的长度和内容同上)  </p>
-<p><em>payloud:padding+address of gadget</em>  </p>
-<img src="https://pic1.zhimg.com/80/v2-a4964a02ab5a974439a157cf9d5b017c_hd.png">  
-如果想连续执行若干段指令，就需要每个gadget执行完毕后可以将控制权交给下一个gadget。所以gadget最后一步应该是RET指令，这样程序的控制权才能得到切换，所以这种技术被称为返回导向变成(Return Oriented Programming)。要执行多个gadget，溢出的数据应该以下面的方式构造  
-
-<p><em>payload:padding+address of gadget1+address of gadget2+……+address of gadget n</em>  </p>
-<p>在这样的构造下，被调用函数返回时会跳转执行gadget1，执行完毕时gadget1的RET指令会将此时栈顶的数据(也就是gadget2的地址)弹出至ip，程序继续跳转执行gadget2,以此类推。  </p>
-<p>现在的任务可以分解为：针对程序栈溢出所要实现的效果，找到若干个以ret结尾的指令片段，按照上述的构造将他们的地址填充到溢出数据中、所以我们要解决以下几个问题。  </p>
-<p>首先，栈溢出之后要实现什么效果？  </p>
-<p>ROP常见的拼凑效果是实现一次系统调用，Linux系统下对应的汇编指令时int 0x80执行这条指令时，被调用函数的编号应存入ax，调用参数按顺序存入bx,cx,dx,si,di中。例如编号125对应函数  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mprotect (void *addr, size_t len, int prot)</span><br></pre></td></tr></table></figure>
-
-<p>可用该函数将栈的属性改成可执行，这样就可以shellcode了。假如我们想利用系统调用执行这个函数，eax,ebx,ecx,edx应该分别为”125”、内存栈的分段地址(可以通过调试工具确定)、还有”0x10000”(需要修改的空间字节数，也许更长)、和”7”(RWX权限)。   </p>
-<p>其次，如何寻找对应的指令片段？  </p>
-<p>有若干开源工具可以实现搜索以ret结尾的指令片段，著名的包括ROPgadget rp++ ropeme 等，甚至也可以用grep等文本匹配工具在汇编指令中搜索ret再进一步筛选。  </p>
-<p>最后，如何传入系统调用的参数？  </p>
-<p>对于上面提到的mprotect函数，我们需要将参数传输至寄存器，所以可以用pop指令将栈顶数据弹入寄存器。如果在内存中找到直接可用的数据，也可以用mov指令来进行传输，不过写入数据再pop要比先搜索再mov来的简单。如果要用pop指令来传输调用参数，就需要在溢出数据内包含这些参数，所以上面的溢出数据格式需要一点修改。对于单个gadget，pop所传输的数据应该在gadget地址之后  </p>
-<p>在调用mprotect()为栈开启可执行权限之后，我们希望执行一段shellcode,所以要将shellcode也加入溢出数据，并将shellcode的开始地址加到int 0x80的gadget之后，但确定shellcode在内存中的确切位置时很困难的事，我们可以使用push esp这个gadget(假如可以找到)(用esp和shellcode的长度来确定shellcode的起始位置)  </p>
-<p>对于所有包含pop指令的gadget，在其地址之后都要添加pop的传输数据，同时在所有gadget最后包含一段shellcode，最终溢出数据结构应该变成如下格式。  </p>
-<p><em>payload:padding+address of gadget1+address of gadget2+……+address of gadget n+shellcode</em>  </p>
-<p>此处为了简单，先假定输入溢出数据不受”\x00”字符的影响，所以payload可以直接包含”\x7d\x00\x00\x00”(传给eax的参数125)。如果希望实现更为真实的操作，可以用多个gadget通过运算得到上述参数。比如通过下面三条gadget来给eax传递参数。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pop eax; ret;         # pop stack top 0x1111118e into eax  </span><br><span class="line">pop ebx; ret;         # pop stack top 0x11111111 into ebx  </span><br><span class="line">sub eax, ebx; ret;    # eax -= ebx</span><br></pre></td></tr></table></figure>
-
-<p>解决完上述问题，我们就可以拼接出溢出数据，输入至程序来为程序调用栈开启可执行权限并执行shellcode，由于ROP方法带来的灵活性，现在不再需要痛苦地试探shellcode起始地址了。回顾整个输入数据，只有栈的分段地址需要获取确定地址。如果利用gadget读取ebp的值再加上某个合适的数值，就可以保证溢出数据都具有可执行权限，这样就不再需要获取确切地址，也就具有了绕过内存随机化的可能。  </p>
-<p>出于演示的目的，我们假设了所有需要的gadget的存在，在实际搜索及拼接gadget时，并不会像上面一样顺利，有两个方面需要注意。  </p>
-<p>第一，很多时候并不能一次凑齐全部的理想指令片段，这时候就要通过数据地址的偏移、寄存器之间的数据传输等方法来“曲线救国”。举个例子，假设找不到下面这条gadget</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pop ebx; ret;</span><br></pre></td></tr></table></figure>
-
-<p>但假设可以找到下面的gadget</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov ebx, eax; ret;</span><br></pre></td></tr></table></figure>
-
-<p>我们就可以将他和</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pop eax; ret;</span><br></pre></td></tr></table></figure>
-
-<p>组合起来实现将数据传输给ebx的功能。上面提到的用多个gadget避免输入”\x00”也是一个实例应用。  </p>
-<p>第二，要小心gadget是否会破坏前面各个gadget已经实现的部分，比如可能修改某个已经写入数值的寄存器，另外，要特别小心gadget对ebp和esp的操作，因为他们变化会改变返回地址的位置，进而使后续的gadget无法执行。  </p>
-<h5 id="Hijack-GOT"><a href="#Hijack-GOT" class="headerlink" title="Hijack GOT"></a>Hijack GOT</h5><p>根据上面技术，要完成的任务包括：在内存中修改某个函数的地址，使其指向另一个函数为了方便理解，不妨设修改printf()函数的地址使其指向system()，这样修改之后的程序对内printf()的调用就执行了system()函数。要实现这个过程，我们就要弄清楚函数调用程序时是如何“找到”被调用函数的。<br>&ensp;  </p>
-<p>程序对外部函数的调用需要在生成可执行文件时将外部函数链接到程序中，链接的方式分为静态链接和动态链接。静态链接得到的可执行文件包含外部函数的全部代码，动态链接得到的可执行文件并不包含外部函数的代码，而是在运行时将动态链接库(若干个外部函数的集合)加载到内存的某个位置，再在发生调用时去链接库定位所需的函数。  </p>
-<p>可程序如何在链接库内定位到所需的函数呢？这个过程用到了两张表————GOT和PLT，GOT全称是全局偏移量表(<strong>G</strong>lobal <strong>O</strong>ffset <strong>T</strong>able),用来储存外部函数在内存的确切位置。GOT储存在数据段(Data Segment)内，可以再程序运行中被修改。PLT全称是程序链接表(<strong>P</strong>rocedure <strong>L</strong>inkage <strong>T</strong>able)，用来储存外部函数的入口点(entry)，换言之程序总会到PLT这里寻找外部函数的地址。PLT储存在代码段(Code Segment)在运行之前就已经确定且不会被修改，所以PLT并不会知道程序运行时动态链接库被加载的确切位置。那么<br>PLT表储存的入口点是什么呢？就是GOT表中对应条目的地址。  </p>
-<p><strong>PLT和GOT表</strong>  </p>
-<p>我们好像又发现了一个不合理的地方，外部函数的内存地址储存在GOT而非PLT表内，PLT储存在入口点又指向GOT的对应条目，那么程序为什么选择PLT而非GOT作为调用的入口点呢？在程序启动时确定所有外部函数的内存地址并写入GOT表，之后只使用GOT表不是更方便吗？这样的设计是为了程序的运行效率。<br>GOT表的初始值都指向PLT表对应条目的某个片段，这个片段的作用时调用一个函数地址解析函数。当程序需要调用某个外部函数时，首先到PLT表内寻找对应的入口点，跳转到GOT表内。如果这是第一次调用这个函数，程序会通过GOT表再次跳回PLT表，运行地址解析程序确定函数的确切地址，并用其覆盖GOT表的初始值，之后再执行函数调用。当再次调用这个函数时，程序仍然会首先通过PLT表跳转到GOT表，此时GOT表已经存在获取函数的内存地址，所以会直接跳转到函数所在地址执行函数。整个过程如下面两张图所示。<br><img src="https://pic3.zhimg.com/80/v2-b78288c5eb8bfd2568728f34fbbb0e9e_hd.png"><br><strong>第一次调用函数解析函数地址并存入GOT表</strong><br><img src="https://pic4.zhimg.com/80/v2-caa5320d0bb0101edad4b9127f6fe413_hd.png">  </p>
-<p><strong>再次调用时时函数直接读取GOT表内的地址</strong>  </p>
-<p>上述实现遵循的是一种被称为<strong>LAZY</strong>的设计思想，他将需要完成的操作(解析外部函数的内存地址)留到实际调用时才进行，而非在程序一开始运行就解析出全部函数地址。这个过程也启示了我们如何实现函数的伪装，那就是到GOT表中将函数A的地址修改为函数B的地址。这样在后面所有的函数A的调用都会执行函数B。  </p>
-<p>那么我们的目标可以分解为如下几部分：确定函数A在GOT表中的条目位置，确定函数B在内存中的地址，将函数B的地址写入函数A在GOT表中的条目。  </p>
-<p>首先如何确定函数A在GOT表中的条目位置？  </p>
-<p>程序调用时函数是通过PLT表跳转到GOT表的对应条目，所以可以在函数调用的汇编指令中找到PLT表的入口位置，从而定位到该函数在GOT中的条目。  </p>
-<p>例如  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">call 0x08048430 &lt;printf@plt&gt;</span><br></pre></td></tr></table></figure>
-
-<p>就说明pintf在PLT表的入口点是在0x08048430,所以0x08048430处储存的就是GOT表中的printf的条目位置。  </p>
-<p>其次如何确定函数B在内存中的位置？  </p>
-<p>如果系统开启了内存布局随机化(ASLR)，程序每次运行动态链接库时的加载位置都是随机的，就很难通过调试工具直接确定函数的地址。加入函数B在栈溢出之前已经被调用过，我们当然可以通过前一个问题的答案来获取地址。但我们心仪的攻击函数往往并不满足被调用过的要求，也就是GOT表中并没有其真实的内存地址。幸运的是函数在动态库内的相对位置是固定的，在动态库打包生成时就已经确定。所以我们知道了函数A的运行地址(读取GOT表内容)，也知道函数A和函数B在动态链接库内的相对位置，就可以推算出函数B的运行时地址。  </p>
-<p>最后，如何实现GOT表内的数据的修改？  </p>
-<p>很难找到合适的函数来完成这一任务，不过我们还有强大ROP(DIY大法好)。假设我们可以找到以下若干条gadget，就不难改写GOT表中的数据，从而实现函数的伪装。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pop eax; ret;         # printf@plt -&gt; eax</span><br><span class="line">mov ebx [eax]; ret;   # printf@got -&gt; ebx</span><br><span class="line">pop ecx; ret;         # addr_diff = system - printf -&gt; ecx</span><br><span class="line">add [ebx] ecx; ret;   # printf@got += addr_diff</span><br></pre></td></tr></table></figure>
-
-<p>从修改GOT表的过程可以看出，这种方法也可以在一定程度上绕过内存随机化。  </p>
-<p><strong>防御措施</strong>  </p>
-<p>介绍过几种溢出的基础方法，我们再来补充一下操作系统内有哪些常见的措施可以进行防御，首先，通常情况下默认编译设置下都会取消栈上数据的可执行权限，这样简单的shellcode溢出攻击就无法实现了。其次可以在操作系统内开启内存布局随机化(ASLR)，这样可以增大确定堆栈内数据和动态库内函数内存地址的难度。编译程序时还可以设置某些编译选项，使程序在运行时会在函数栈上的ebp地址和返回地址之间生成一个特殊的值，这个值被称为“金丝雀值”。这样一旦发生了栈溢出并覆盖了返回地址，这个值就会被改写，从而实现函数的越界检查。最后值得强调的是，尽可能写出安全可靠的代码，不给栈溢出提供写入越界的可能。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/01/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/01/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-01T16:19:50+08:00">
-                2019-10-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/10/01/Learning/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -578,7 +376,9 @@ padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函�
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">John Doe</p>
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Aerfafish">
+            
+              <p class="site-author-name" itemprop="name">Aerfafish</p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
@@ -589,7 +389,7 @@ padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">1</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -662,7 +462,7 @@ padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函�
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">Aerfafish</span>
 
   
 </div>

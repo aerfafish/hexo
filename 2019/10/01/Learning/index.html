@@ -83,7 +83,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Pwn Primary Learning">
 <meta property="og:url" content="http://yoursite.com/2019/10/01/Learning/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Aerfafish">
 <meta property="og:description" content="Pwn初学习在学习完逆向后，尝试Pwn的第一天。总结一下Pwn的几个基本思路。当函数执行内部指令的过程中我们是无法拿到程序的控制权，对此至于在发生在函数调用或者结束函数调用。程序的控制权会在函数状态之间跳转。这时才可以修改函数状态来实现攻击，所以我们的目的就是让ip载入攻击指令的地址。让ip载入攻击指令的地址有几种：覆盖返回地址，在ret时将攻击地址赋值给ip。其次我们也可以在溢出数据内包含一段攻">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://pic3.zhimg.com/80/v2-f9893739d4495a7708434fb93cebdfae_hd.png">
@@ -91,7 +91,7 @@
 <meta property="og:image" content="https://pic1.zhimg.com/80/v2-a4964a02ab5a974439a157cf9d5b017c_hd.png">
 <meta property="og:image" content="https://pic3.zhimg.com/80/v2-b78288c5eb8bfd2568728f34fbbb0e9e_hd.png">
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-caa5320d0bb0101edad4b9127f6fe413_hd.png">
-<meta property="og:updated_time" content="2019-10-02T06:13:40.083Z">
+<meta property="og:updated_time" content="2019-10-02T07:20:54.680Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Pwn Primary Learning">
 <meta name="twitter:description" content="Pwn初学习在学习完逆向后，尝试Pwn的第一天。总结一下Pwn的几个基本思路。当函数执行内部指令的过程中我们是无法拿到程序的控制权，对此至于在发生在函数调用或者结束函数调用。程序的控制权会在函数状态之间跳转。这时才可以修改函数状态来实现攻击，所以我们的目的就是让ip载入攻击指令的地址。让ip载入攻击指令的地址有几种：覆盖返回地址，在ret时将攻击地址赋值给ip。其次我们也可以在溢出数据内包含一段攻">
@@ -131,7 +131,7 @@
 
 
 
-  <title>Pwn Primary Learning | Hexo</title>
+  <title>Pwn Primary Learning | Aerfafish</title>
   
 
 
@@ -161,7 +161,7 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
+        <span class="site-title">Aerfafish</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -241,13 +241,13 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/01/Learning/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="Aerfafish">
       <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="Aerfafish">
     </span>
 
     
@@ -307,6 +307,7 @@
       
         <h2 id="Pwn初学习"><a href="#Pwn初学习" class="headerlink" title="Pwn初学习"></a>Pwn初学习</h2><p>在学习完逆向后，尝试Pwn的第一天。总结一下Pwn的几个基本思路。<br>当函数执行内部指令的过程中我们是无法拿到程序的控制权，对此至于在发生在函数调用或者结束函数调用。程序的控制权会在函数状态之间跳转。这时才可以修改函数状态来实现攻击，所以我们的目的就是让ip载入攻击指令的地址。<br>让ip载入攻击指令的地址有几种：覆盖返回地址，在ret时将攻击地址赋值给ip。其次我们也可以在溢出数据内包含一段攻击指令，或者在内存其他位置寻找可用的攻击指令。  </p>
 <p>暂时学习的技术有：<br>修改返回地址，让其指向溢出数据的一段指令(shellcode)<br>修改返回地址，让其指向内存中已有的某个函数(return2libc)<br>修改返回地址，让其指向内存中已有的一段指令(ROP)<br>修改某个被调用函数的地址，让其指向另一个函数(hijack GOT)</p>
+<a id="more"></a>
 <h4 id="shellcode"><a href="#shellcode" class="headerlink" title="shellcode"></a>shellcode</h4><p>我们需要在溢出数据中包含一段攻击指令，用攻击指令的起始位置覆盖掉返回地址。从而达到打开shell获得当前进程的控制权的目的。这类指令片段也被称为”shellcode“。shellcode可以用汇编语言再转成对应的机器码，也可以上网搜索直接复制粘贴。<br><img src="https://pic3.zhimg.com/80/v2-f9893739d4495a7708434fb93cebdfae_hd.png"><br>payload:padding1+address of shellcode+padding2+shellcode<br>padding1处的数据可以随意填充(但不可以包含”x00”。否则向程序传入溢出数据时可能会造成截断)，长度应该正好覆盖函数的基地址。address of shellcode是后面shellcode的起始地址，用来覆盖返回地址。padding2处的数据也可以随意填充，长度可以任意。shellcode应该为十六进制机器码格式<br>对于以上构造，我们要解决两个问题。<br>1.返回地址之前的填充数据(padding1)应该多长<br>我们可以用调试工具查看汇编代码来确定这个距离，也可以在运行程序时用不断增加输入的长度的方法来试探(如果返回地址被无效地址例如”AAAA”覆盖,程序会终止并报错).<br>2.shellcode起始地址应该时多少<br>我们可以在调试工具里查看返回地址的位置(可以查看ebp的内容然后再加4(32位))，可是在调试工具里的这个地址和正常运行时并不一致，这是运行环境变量等因素有所不同造成的，所以这种情况我们只能得到大致但不确切的shellcode起始地址，解决办法是在padding2里填充若干的长度的”\x90”。这个机器码对应的指令时NOP，也就是告诉CPU什么都不做，然后跳到吓一跳指令。有了这一段NOP的填充，只要返回地址能命中这一段中的任意位置，都可以无副作用的跳到shellcode的起始位置。  </p>
 <p>操作系统可以将函数调用栈的起始地址设为随机化(ASLR Address Space Layout Randomization)这样程序每次运行时的函数返回地址都会随机变化。反正如果系统关闭了上述的随机化，那么程序每次运行时函数的返回地址会是相同的，这样我们可以通过输入无效的溢出数据来生成core文件，再通过调试工具在core文件中找到返回地址的位置，从而确定shellcode的起始位置(始终为了确定shellcode的起始位置)  </p>
 <p>但执行shellcode还有一个前提就是在函数调用栈上的数据要有可执行的权限(另一个前提是上面提到的关闭内存布局随机化)。很多时候操作系统会关闭函数调用栈的可执行权限。这样shellcode的方法就失效了。不过我们还可以尝试使用内存里已有的指令或者函数。因为这部分本来就是可执行的，所以不会受上述执行权限的限制。这就包括return2lib和ROP两种。  </p>
@@ -402,22 +403,6 @@ padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函�
       
 
       
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/10/01/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
-        </div>
-      
 
       
       
@@ -479,7 +464,9 @@ padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函�
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">John Doe</p>
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Aerfafish">
+            
+              <p class="site-author-name" itemprop="name">Aerfafish</p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
@@ -490,7 +477,7 @@ padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">1</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -579,7 +566,7 @@ padding1处的数据可以随意填充(不能是"\x00")，长度刚好覆盖函�
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">Aerfafish</span>
 
   
 </div>
