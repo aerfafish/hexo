@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="Docker的安装由于Pwn中 开始安装 由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本：   1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引 1$ sudo apt-get update  安装最新版本的Docker CE： 1$ sudo apt-get instal">
+<meta name="description" content="Docker的安装由于Pwn中大量的学习程序需要封装在Docker镜像之中，并通过Pwntools和IDA远程调试，所以在此总结一个环境的搭建过程 开始安装 由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本：   1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引 1$ sud">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Docker安装及入门命令">
 <meta property="og:url" content="http://yoursite.com/2019/10/02/Docker安装及入门命令/index.html">
 <meta property="og:site_name" content="Aerfafish">
-<meta property="og:description" content="Docker的安装由于Pwn中 开始安装 由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本：   1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引 1$ sudo apt-get update  安装最新版本的Docker CE： 1$ sudo apt-get instal">
+<meta property="og:description" content="Docker的安装由于Pwn中大量的学习程序需要封装在Docker镜像之中，并通过Pwntools和IDA远程调试，所以在此总结一个环境的搭建过程 开始安装 由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本：   1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引 1$ sud">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-02T13:09:12.254Z">
+<meta property="og:updated_time" content="2019-10-03T03:21:07.259Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker安装及入门命令">
-<meta name="twitter:description" content="Docker的安装由于Pwn中 开始安装 由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本：   1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引 1$ sudo apt-get update  安装最新版本的Docker CE： 1$ sudo apt-get instal">
+<meta name="twitter:description" content="Docker的安装由于Pwn中大量的学习程序需要封装在Docker镜像之中，并通过Pwntools和IDA远程调试，所以在此总结一个环境的搭建过程 开始安装 由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本：   1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引 1$ sud">
 
 
 
@@ -299,7 +299,7 @@
       
 
       
-        <h4 id="Docker的安装"><a href="#Docker的安装" class="headerlink" title="Docker的安装"></a>Docker的安装</h4><p>由于Pwn中</p>
+        <h4 id="Docker的安装"><a href="#Docker的安装" class="headerlink" title="Docker的安装"></a>Docker的安装</h4><p>由于Pwn中大量的学习程序需要封装在Docker镜像之中，并通过Pwntools和IDA远程调试，所以在此总结一个环境的搭建过程</p>
 <h5 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h5><ul>
 <li><p>由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本：  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get remove docker docker-engine docker-ce docker.io</span><br></pre></td></tr></table></figure>
@@ -388,19 +388,44 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -i -t -p 23956:23946 ubuntu:18.04 /bin/bash</span><br><span class="line">$ exit                   #关闭docker容器</span><br><span class="line">$ docker rename amazing_core aerfafish</span><br></pre></td></tr></table></figure>
 
 <p>我们在IDA所在的文件夹的dbgsrv文件夹下找到需要的调试服务器linux_server(32位)和linux_serverx64(64位)并复制到容器中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker cp linux_serverx64 aerfafish:/root/linux_serverx64</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker cp linux_serverx64 aerfafish:/root/linux_serverx64</span><br></pre></td></tr></table></figure>
 
 <p>将linux_serverx64复制到64位容器中的/root目录下。此时我们登录容器可以看到linux_serverx64，运行该server会提示正在监听23946端口。  </p>
 <p>这时候打开IDA，选择debugger为remote linux debugger  </p>
 <p>打开ifconfig查看docker ip地址在debugger的Process Option中设置IP和端口为23946则可以进行远程调试  </p>
 <p>但这时可能会遇见一个错误<kdb><strong><em>Operation not permitted[1] Closing connection</em></strong></kdb><br>加入 –security-opt seccomp:unconfined选项，关闭docker远程命令执行保护</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --security-opt seccomp:unconfined -it -p 23945:23946 ubuntu:18.04 /bin/bash</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --security-opt seccomp:unconfined -it -p 23945:23946 ubuntu:18.04 /bin/bash</span><br></pre></td></tr></table></figure>
 
 <h4 id="使用pwntools和IDA调试程序"><a href="#使用pwntools和IDA调试程序" class="headerlink" title="使用pwntools和IDA调试程序"></a>使用pwntools和IDA调试程序</h4><p>在上一节中我们尝试了使用IDA配置远程调试，但是在调试中我们可能会有一些特殊的需求，比如自动化完成一些操作或者向程序传递一些包含不可见字符的地址，如\x50\x83\x04\x08(0x08048350)。这个时候我们就需要使用脚本pwntools来完成此类操作。<br>安装完成后输入python进入python环境，使用from pwn import * 导入pwntools库。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; from pwn import *</span><br></pre></td></tr></table></figure>
 
 <p>使用docker exec在32位的容器中新开一个bash shell，跳转到heapTest_x86所在目录/root，查看容器的IP地址，然后执行命令socat tcp-listen:10001,reuseaddr,fork EXEC:./heapTest_x86,pty,raw,echo=0将heapTest_x86的IO转发到10001端口上。<br>在此之前我们需要在容器中安装socat  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ apt-get update</span><br><span class="line">$ apt-get install socat</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ socat tcp-listen:10001,reuseaddr,fork EXEC:./heapTest_x86,pty,raw,echo=0</span><br></pre></td></tr></table></figure>
+
+<p>但在这里还有几个遇到的坑，由于我安装的64位ubuntu所以运行32位file时会出现找不到该文件，就明明文件在那却找不到，我们只需要安装32位库就可以解决这个问题了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ apt-get install ia32-libs</span><br><span class="line">$ apt-get install lib32bz2-1.0</span><br><span class="line">$ apt-get install lib32stdc++6</span><br></pre></td></tr></table></figure>
+
+<p>这时利用pwntools连接io</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; io = remote(&quot;172.17.0.2&quot;, 10001)</span><br></pre></td></tr></table></figure>
+
+<p>这里有个小坑，就是我在ifconfig上查看的ip是172.17.0.1但实际连接时却是172.17.0.2  </p>
+<p>这时在IDA中attach to process 附加在进程./heapTest_x86上<br>但我遇见了报错<br><strong><em>The debugger could not attach to the selected process.<br>This can perhaps indicate the process was just terminated, or that you don’t have the necessary privileges.</em></strong><br>查找原因 可能是权限不够</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ chmod 777 ./heapTest_x86</span><br></pre></td></tr></table></figure>
+
+<p>仍然没用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -it -p 23945:23946 ubuntu:18.04 /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>看了看和我前面就差了个<strong><em>–cap-add=SYS_PTRACE</em></strong><br>想了想还要重新装socat,vim,32位库，一气之下就先不干了。  </p>
+<p>如果附加成功的话，EIP将指向vdso中的pop ebp指令上。  </p>
+<p>这几行指令实际上是执行完sys_read后的指令，此处我们不需要关心它，直接按F9，选中标志会消失。<br>回到python窗口，我们使用pwntools的recv/send函数族来与运行中的heapTest_x86进行交互。首先输入io.recv()，我们发现原先会在shell窗口出现的菜单被读出到python窗口里了。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; io.recv()</span><br></pre></td></tr></table></figure>
+
+<p>同样的，我们通过io.send()也可以向这个进程传递输入。我们使用io.send(‘1’)告诉这个进程我们要选择选项1。这个时候我们切换到IDA窗口，发现IDA还是处于挂起状态，因为我们还没有输入回车。所以我们再执行io.send(‘\n’)，切换到IDA窗口就会发现EIP停在了熟悉的程序领空。我们也可以直接使用io.sendline()，就可以直接在输入的结尾自动加上’\n’了。  </p>
+<p>我们在python中再次输入io.recv()，发现并没有读取到输出，并且python处于阻塞状态。这是因为程序此时没有输出可读取。我们在IDA中按F8到call mallocChunk一行，此时按F7进入函数，在函数中运行到call _fflush的下一行，就会发现python的阻塞状态解除了。<br>当我们希望结束调试时，应该使用io.close()关闭掉这个io。否则下一次试图attach时会发现有两个./heapTest_x86进程。在IDA中按Ctrl+F2即可退出调试模式。  </p>
+<p><strong>配置实验环境打包如下：</strong><br>链接:<a href="https://pan.baidu.com/s/1xr9n9EBs2dALOkmIFaIdcQ" target="_blank" rel="noopener">https://pan.baidu.com/s/1xr9n9EBs2dALOkmIFaIdcQ</a>  密码:bcd6</p>
+
       
     </div>
     
